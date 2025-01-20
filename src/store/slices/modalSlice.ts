@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ModalType } from "../../types";
+import { TaskType } from "../../types";
 
 type InitialStateType = {
   boardId: string;
   listId: string;
-  task: ModalType;
+  task: TaskType;
 };
 const initialState: InitialStateType = {
   boardId: "board-0",

@@ -1,4 +1,4 @@
-export interface ModalType {
+export interface TaskType {
   taskId: string;
   taskName: string;
   taskDescription: string;
@@ -10,4 +10,15 @@ export interface LogType {
   logAuthor: string;
   logMessage: string;
   logTimestamp: string;
+}
+
+export interface BoardType {
+  boardId: string;
+  boardName: string;
+  list: BoardListType[];
+}
+export interface BoardListType {
+  listId: string;
+  listName: string;
+  tasks: TaskType[];
 }
