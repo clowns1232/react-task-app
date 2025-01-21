@@ -1,24 +1,40 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { TaskType } from "../../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ITask } from "../../types";
 
-type InitialStateType = {
+type TSetModalDataAction = {
   boardId: string;
   listId: string;
-  task: TaskType;
+  task: ITask;
 };
-const initialState: InitialStateType = {
+
+type TModalState = {
+  boardId: string;
+  listId: string;
+  task: ITask;
+};
+
+const initialState: TModalState = {
   boardId: "board-0",
   listId: "list-0",
   task: {
     taskId: "task-0",
-    taskName: "task-0",
-    taskDescription: "task-descript",
-    taskOwner: "task-0",
+    taskName: "task 0",
+    taskDescription: "task description",
+    taskOwner: "Jihye",
   },
 };
+
 const modalSlice = createSlice({
-  name: "modal",
-  initialState,
-  reducers: {},
+  name: "modal", //이름
+  initialState, //초기 State
+  reducers: {
+    setModalData: (state, { payload }: PayloadAction<TSetModalDataAction>) => {
+      state.boardId = payload.boardId;
+      state.listId = payload.listId;
+      state.task = payload.task;
+    },
+  },
 });
+
+export const { setModalData } = modalSlice.actions;
 export const modalReducer = modalSlice.reducer;

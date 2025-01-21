@@ -3,16 +3,17 @@ import { createGlobalTheme, style } from "@vanilla-extract/css";
 export const vars = createGlobalTheme(":root", {
   color: {
     main: "#ffa726",
-    mainDarker: "#f57c00",
-    mainFaded: "#ffb74d",
-    mainFadedBright: "#ffb74da6",
+    mainDarker: "#608BC1",
+    mainFaded: "#7F9FCF",
+    mainFadedBright: "#B9D7EA",
     list: "rgb(235, 236, 240)",
+    task: "rgb(255, 255, 255)",
     taskHover: "rgb(245, 245, 245)",
     brightText: "rgb(255, 255, 255)",
     darkText: "rgb(24, 42, 77)",
     secondaryDarkText: "rgb(94, 108, 132)",
-    secondaryDaryTextHober: "rgb(218, 219, 226)",
-    selectedTab: "rgb(137, 176, 174)",
+    secondaryDarkTextHover: "rgb(218, 219, 225)",
+    selectedTab: "#F39E60",
     updateButton: "rgb(237, 180, 88)",
     deleteButton: "rgb(237, 51, 88)",
   },
@@ -28,7 +29,7 @@ export const vars = createGlobalTheme(":root", {
     medium: "10px",
     big1: "20px",
     big2: "15px",
-    liseSpacing: "30px",
+    listSpacing: "30px",
   },
   font: {
     body: "arial",
@@ -42,8 +43,9 @@ export const vars = createGlobalTheme(":root", {
 });
 
 export const appContainer = style({
+  fontFamily: vars.font.body,
   display: "flex",
-  flexDirection: "row",
+  flexDirection: "column",
   minHeight: "100vh",
   height: "max-content",
   width: "100vw",
@@ -54,6 +56,7 @@ export const board = style({
   flexDirection: "row",
   height: "100%",
 });
+
 export const buttons = style({
   marginTop: "auto",
   paddingLeft: vars.spacing.big2,

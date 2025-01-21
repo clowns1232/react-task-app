@@ -1,63 +1,71 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { BoardType } from "../../types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IBoard, IList, ITask } from "../../types";
 
-type initialStateType = {
+type TBoardsState = {
   modalActive: boolean;
-  boardArray: BoardType[];
+  boardArray: IBoard[];
 };
 
-const initialState: initialStateType = {
+type TAddBoardAction = {
+  board: IBoard;
+};
+
+type TDeleteListAction = {
+  boardId: string;
+  listId: string;
+};
+
+type TAddListAction = {
+  boardId: string;
+  list: IList;
+};
+
+type TAddTaskAction = {
+  boardId: string;
+  listId: string;
+  task: ITask;
+};
+
+const initialState: TBoardsState = {
   modalActive: false,
   boardArray: [
     {
       boardId: "board-0",
       boardName: "첫 번째 게시물",
-      list: [
+      lists: [
         {
           listId: "list-0",
-          listName: "list-0",
+          listName: "List 1",
           tasks: [
             {
               taskId: "task-0",
-              taskName: "task-0",
-              taskDescription: "Descript",
-              taskOwner: "hwang",
+              taskName: "Task 1",
+              taskDescription: "Description",
+              taskOwner: "Jihye",
+            },
+            {
+              taskId: "task-1",
+              taskName: "Task 2",
+              taskDescription: "Description",
+              taskOwner: "Jihye",
             },
           ],
         },
         {
           listId: "list-1",
-          listName: "list-1",
-          tasks: [
-            {
-              taskId: "task-1",
-              taskName: "task-1",
-              taskDescription: "Descript",
-              taskOwner: "hwang",
-            },
-          ],
-        },
-        {
-          listId: "list-2",
-          listName: "list-2",
+          listName: "List 2",
           tasks: [
             {
               taskId: "task-2",
-              taskName: "task-2",
-              taskDescription: "Descript",
-              taskOwner: "hwang",
+              taskName: "Task 3",
+              taskDescription: "Description",
+              taskOwner: "Jihye",
             },
-          ],
-        },
-        {
-          listId: "list-3",
-          listName: "list-3",
-          tasks: [
             {
               taskId: "task-3",
-              taskName: "task-3",
-              taskDescription: "Descript",
-              taskOwner: "hwang",
+              taskName: "Task 4",
+              taskDescription: "Description",
+              taskOwner: "Jihye",
             },
           ],
         },
@@ -65,10 +73,59 @@ const initialState: initialStateType = {
     },
   ],
 };
+
 const boardsSlice = createSlice({
   name: "boards",
   initialState,
-  reducers: {},
+  reducers: {
+    addBoard: (state, { payload }: PayloadAction<TAddBoardAction>) => {
+      state.boardArray.push(payload.board); //내부에서 immer 라이브러리를 쓰기 때문에 불변성 신경쓰지 않아도 됨
+    },
+    addList: (state, { payload }: PayloadAction<TAddListAction>) => {
+      state.boardArray.map((board) =>
+        board.boardId === payload.boardId
+          ? {
+              ...board,
+              lists: board.lists.push(payload.list),
+            }
+          : board
+      );
+    },
+    addTask: (state, { payload }: PayloadAction<TAddTaskAction>) => {
+      state.boardArray.map((board) =>
+        board.boardId === payload.boardId
+          ? {
+              ...board,
+              lists: board.lists.map((list) =>
+                list.listId === payload.listId
+                  ? {
+                      ...list,
+                      tasks: list.tasks.push(payload.task),
+                    }
+                  : list
+              ),
+            }
+          : board
+      );
+    },
+    deleteList: (state, { payload }: PayloadAction<TDeleteListAction>) => {
+      state.boardArray = state.boardArray.map((board) =>
+        board.boardId === payload.boardId
+          ? {
+              ...board,
+              lists: board.lists.filter(
+                (list) => list.listId !== payload.listId
+              ),
+            }
+          : board
+      );
+    },
+    setModalActive: (state, { payload }: PayloadAction<boolean>) => {
+      state.modalActive = payload;
+    },
+  },
 });
 
+export const { addBoard, addList, addTask, deleteList, setModalActive } =
+  boardsSlice.actions;
 export const boardsReducer = boardsSlice.reducer;
