@@ -1,6 +1,6 @@
+import { ChangeEvent, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { useTypedDispatch, useTypedSelector } from "../../hooks/redux";
-import { ChangeEvent, useState } from "react";
 import {
   deleteTask,
   setModalActive,
@@ -10,6 +10,7 @@ import { addLog } from "../../store/slices/loggerSlice";
 import { v4 } from "uuid";
 import {
   buttons,
+  closeButton,
   deleteButton,
   header,
   input,
@@ -24,9 +25,10 @@ const EditModal = () => {
   const editingState = useTypedSelector((state) => state.modal);
   const [data, setData] = useState(editingState);
 
-  const handleCloseButtonClick = () => {
+  const handleCloseButton = () => {
     dispatch(setModalActive(false));
   };
+
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
@@ -45,7 +47,7 @@ const EditModal = () => {
       },
     });
   };
-  const onOwnerChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOwnerChange = (e: ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
       task: {
@@ -63,16 +65,14 @@ const EditModal = () => {
         task: data.task,
       })
     );
-
     dispatch(
       addLog({
         logId: v4(),
-        logMessage: `일 수정하기: ${editingState.task.taskName}`,
+        logMessage: `일 수정하기 : ${editingState.task.taskName}`,
         logAuthor: "User",
         logTimestamp: String(Date.now()),
       })
     );
-
     dispatch(setModalActive(false));
   };
 
@@ -84,23 +84,23 @@ const EditModal = () => {
         taskId: editingState.task.taskId,
       })
     );
-
     dispatch(
       addLog({
         logId: v4(),
-        logMessage: `일 삭제하기: ${editingState.task.taskName}`,
-        logAuthor: "user",
+        logMessage: `일 삭제하기 : ${editingState.task.taskName}`,
+        logAuthor: "User",
         logTimestamp: String(Date.now()),
       })
     );
     dispatch(setModalActive(false));
   };
+
   return (
     <div className={wrapper}>
       <div className={modalWindow}>
         <div className={header}>
           <div className={title}>{editingState.task.taskName}</div>
-          <FiX className={closeButton} onClick={handleCloseButtonClick} />
+          <FiX className={closeButton} onClick={handleCloseButton} />
         </div>
         <div className={title}>제목</div>
         <input
@@ -108,27 +108,21 @@ const EditModal = () => {
           type="text"
           value={data.task.taskName}
           onChange={handleNameChange}
-          placeholder=""
         />
-
-        <div>설명</div>
+        <div className={title}>설명</div>
         <input
           className={input}
           type="text"
           value={data.task.taskDescription}
           onChange={handleDescriptionChange}
-          placeholder=""
         />
-
-        <div>생성한 사람</div>
+        <div className={title}>생성한 사람</div>
         <input
           className={input}
           type="text"
           value={data.task.taskOwner}
-          onChange={onOwnerChange}
-          placeholder=""
+          onChange={handleOwnerChange}
         />
-
         <div className={buttons}>
           <button className={updateButton} onClick={handleUpdate}>
             일 수정하기
